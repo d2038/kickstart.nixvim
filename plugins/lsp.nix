@@ -63,6 +63,7 @@
     # https://nix-community.github.io/nixvim/plugins/lsp/index.html
     plugins.lsp = {
       enable = true;
+      inlayHints = true;
 
       # Enable the following language servers
       #  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
@@ -113,6 +114,22 @@
             #};
           };
         };
+
+        nil-ls = {
+          enable = true;
+          onAttach.function = ''
+            if client.server_capabilities.inlayHintProvider ~= nil then
+              client.server_capabilities.inlayHintProvider = nil
+            end
+          '';
+        };
+
+        nixd = {
+          enable = true;
+          onAttach.function = ''
+            client.server_capabilities = {inlayHintProvider = true}
+          '';
+        };      
       };
 
       keymaps = {
